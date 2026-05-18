@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Color tokens ──────────────────────────────────
+   Navy   #0F1626   background primary
+   Dark   #162030   card / surface
+   Border #243048   subtle border
+   Coral  #FF533D   accent
+   Leath  #AB987A   muted text
+   Egg    #F5F5F5   primary text
+   ───────────────────────────────────────────────── */
+
+* {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0F1626;
+  color: #F5F5F5;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #0F1626; }
+::-webkit-scrollbar-thumb { background: #243048; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #FF533D; }
+
+/* ── Typography ── */
+.font-mono { font-family: 'Space Mono', monospace; }
+.text-coral  { color: #FF533D; }
+.text-screen { color: #F5F5F5; }
+
+/* ── Accent label ── */
+.label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: #FF533D;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Cards ── */
+.card {
+  background: #162030;
+  border: 1px solid #243048;
+  border-radius: 12px;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.card:hover {
+  border-color: #FF533D;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(255, 83, 61, 0.12);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #FF533D;
+  color: #F5F5F5;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary:hover {
+  background: #ff6b59;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 83, 61, 0.35);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: transparent;
+  color: #FF533D;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1px solid #FF533D;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-outline:hover {
+  background: rgba(255, 83, 61, 0.1);
+  transform: translateY(-2px);
+}
+
+/* ── Skill pill ── */
+.skill-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background: #162030;
+  border: 1px solid #243048;
+  border-radius: 12px;
+  transition: border-color 0.2s, transform 0.2s;
+  cursor: default;
+}
+.skill-pill:hover {
+  border-color: #FF533D;
+  transform: translateY(-2px);
+}
+.skill-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 83, 61, 0.1);
+  border: 1px solid rgba(255, 83, 61, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+/* ── Section divider ── */
+.section-divider {
+  width: 40px;
+  height: 3px;
+  background: #FF533D;
+  border-radius: 2px;
+  margin: 12px 0 32px 0;
+}
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-box {
+  background: #162030;
+  border: 1px solid #243048;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 720px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: clamp(16px, 4vw, 32px);
+  position: relative;
+}
+.modal-box::-webkit-scrollbar { width: 4px; }
+.modal-box::-webkit-scrollbar-thumb { background: #FF533D; border-radius: 2px; }
+
+/* ── Dot grid bg ── */
+.dot-grid {
+  background-image: radial-gradient(circle, #1A2535 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ── Fade-in animation ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.6s ease both; }
+.fade-up-1 { animation-delay: 0.1s; }
+.fade-up-2 { animation-delay: 0.2s; }
+.fade-up-3 { animation-delay: 0.3s; }
+.fade-up-4 { animation-delay: 0.4s; }
