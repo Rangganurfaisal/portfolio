@@ -1,11 +1,13 @@
 'use client'
 import { useState } from 'react'
+import Image from 'next/image'
 import { X, ExternalLink, Calendar, MapPin, ChevronRight } from 'lucide-react'
 
 interface Project {
   name: string
   description: string
   tech: string[]
+  images?: string[]
 }
 
 interface Experience {
@@ -59,6 +61,7 @@ const experiences: Experience[] = [
         name: 'APD Safety Compliance Detection (YOLO)',
         description: 'Real-time object detection system deployed on operational CCTV to automatically monitor PPE (hard hat, vest, gloves) compliance. Dataset of ~5,170 annotated images, achieving mAP@50 >85%. Managed full ML lifecycle from data collection to hyperparameter tuning.',
         tech: ['YOLOv8', 'Python', 'OpenCV', 'Custom Dataset', 'Roboflow'],
+        images: ['/apd-1.jpg', '/apd-2.jpg', '/apd-3.jpg', '/apd-4.jpg'],
       },
     ],
   },
@@ -134,9 +137,24 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
               >
                 <div className="flex items-start gap-2 mb-2">
                   <ChevronRight size={14} style={{ color: exp.color, marginTop: '3px', flexShrink: 0 }} />
-                  <div>
+                  <div className="w-full">
                     <h4 className="font-mono font-bold text-sm" style={{ color: '#F5F5F5' }}>{proj.name}</h4>
                     <p className="text-xs leading-relaxed mt-2" style={{ color: '#AB987A' }}>{proj.description}</p>
+                    {proj.images && proj.images.length > 0 && (
+                      <div className="grid grid-cols-2 gap-2 mt-3">
+                        {proj.images.map((src, idx) => (
+                          <div key={idx} className="relative w-full overflow-hidden rounded-lg" style={{ aspectRatio: '16/9' }}>
+                            <Image
+                              src={src}
+                              alt={`${proj.name} ${idx + 1}`}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 768px) 50vw, 300px"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
                     <div className="flex flex-wrap gap-2 mt-3">
                       {proj.tech.map(t => (
                         <span
