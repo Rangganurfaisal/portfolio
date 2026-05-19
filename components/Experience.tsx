@@ -140,56 +140,66 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
                 className="rounded-xl"
                 style={{ background: '#0F1626', border: '1px solid #243048' }}
               >
-                {/* Accordion header */}
-                <button
-                  onClick={() => toggleProject(i)}
-                  className="w-full flex items-center gap-2 p-4 text-left"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-                >
-                  <ChevronRight
-                    size={14}
-                    style={{
-                      color: exp.color,
-                      flexShrink: 0,
-                      transition: 'transform 0.2s',
-                      transform: openProjects[i] ? 'rotate(90deg)' : 'rotate(0deg)',
-                    }}
-                  />
-                  <h4 className="font-mono font-bold text-sm" style={{ color: '#F5F5F5' }}>{proj.name}</h4>
-                </button>
+                {/* Header — always visible */}
+                <div className="flex items-center gap-2 p-4">
+                  {proj.images && proj.images.length > 0 ? (
+                    <button
+                      onClick={() => toggleProject(i)}
+                      className="flex items-center gap-2 text-left"
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                    >
+                      <ChevronRight
+                        size={14}
+                        style={{
+                          color: exp.color,
+                          flexShrink: 0,
+                          transition: 'transform 0.2s',
+                          transform: openProjects[i] ? 'rotate(90deg)' : 'rotate(0deg)',
+                        }}
+                      />
+                      <h4 className="font-mono font-bold text-sm" style={{ color: '#F5F5F5' }}>{proj.name}</h4>
+                    </button>
+                  ) : (
+                    <>
+                      <ChevronRight size={14} style={{ color: exp.color, flexShrink: 0 }} />
+                      <h4 className="font-mono font-bold text-sm" style={{ color: '#F5F5F5' }}>{proj.name}</h4>
+                    </>
+                  )}
+                </div>
 
-                {/* Accordion body */}
-                {openProjects[i] && (
-                  <div className="px-4 pb-4">
-                    <p className="text-xs leading-relaxed mb-3" style={{ color: '#AB987A' }}>{proj.description}</p>
-                    {proj.images && proj.images.length > 0 && (
-                      <div className="grid grid-cols-2 gap-2 mb-3">
-                        {proj.images.map((src, idx) => (
-                          <Image
-                            key={idx}
-                            src={src}
-                            alt={`${proj.name} ${idx + 1}`}
-                            width={800}
-                            height={500}
-                            className="rounded-lg w-full h-auto"
-                            sizes="(max-width: 768px) 50vw, 400px"
-                          />
-                        ))}
-                      </div>
-                    )}
-                    <div className="flex flex-wrap gap-2">
-                      {proj.tech.map(t => (
-                        <span
-                          key={t}
-                          className="font-mono text-xs px-2 py-0.5 rounded"
-                          style={{ background: 'rgba(255,83,61,0.08)', color: '#FF533D', border: '1px solid rgba(255,83,61,0.2)' }}
-                        >
-                          {t}
-                        </span>
+                {/* Always visible: description + tech */}
+                <div className="px-4 pb-4">
+                  <p className="text-xs leading-relaxed mb-3" style={{ color: '#AB987A' }}>{proj.description}</p>
+
+                  {/* Images — only shown when clicked */}
+                  {proj.images && proj.images.length > 0 && openProjects[i] && (
+                    <div className="grid grid-cols-2 gap-2 mb-3">
+                      {proj.images.map((src, idx) => (
+                        <Image
+                          key={idx}
+                          src={src}
+                          alt={`${proj.name} ${idx + 1}`}
+                          width={800}
+                          height={500}
+                          className="rounded-lg w-full h-auto"
+                          sizes="(max-width: 768px) 50vw, 400px"
+                        />
                       ))}
                     </div>
+                  )}
+
+                  <div className="flex flex-wrap gap-2">
+                    {proj.tech.map(t => (
+                      <span
+                        key={t}
+                        className="font-mono text-xs px-2 py-0.5 rounded"
+                        style={{ background: 'rgba(255,83,61,0.08)', color: '#FF533D', border: '1px solid rgba(255,83,61,0.2)' }}
+                      >
+                        {t}
+                      </span>
+                    ))}
                   </div>
-                )}
+                </div>
               </div>
             ))}
           </div>
