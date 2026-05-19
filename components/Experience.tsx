@@ -84,6 +84,11 @@ const experiences: Experience[] = [
 ]
 
 function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
+  const [openProjects, setOpenProjects] = useState<Record<number, boolean>>({})
+
+  const toggleProject = (i: number) =>
+    setOpenProjects(prev => ({ ...prev, [i]: !prev[i] }))
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()}>
@@ -132,30 +137,47 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
             {exp.projects.map((proj, i) => (
               <div
                 key={i}
-                className="rounded-xl p-4"
+                className="rounded-xl"
                 style={{ background: '#0F1626', border: '1px solid #243048' }}
               >
-                <div className="flex items-start gap-2 mb-2">
-                  <ChevronRight size={14} style={{ color: exp.color, marginTop: '3px', flexShrink: 0 }} />
-                  <div className="w-full">
-                    <h4 className="font-mono font-bold text-sm" style={{ color: '#F5F5F5' }}>{proj.name}</h4>
-                    <p className="text-xs leading-relaxed mt-2" style={{ color: '#AB987A' }}>{proj.description}</p>
+                {/* Accordion header */}
+                <button
+                  onClick={() => toggleProject(i)}
+                  className="w-full flex items-center gap-2 p-4 text-left"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  <ChevronRight
+                    size={14}
+                    style={{
+                      color: exp.color,
+                      flexShrink: 0,
+                      transition: 'transform 0.2s',
+                      transform: openProjects[i] ? 'rotate(90deg)' : 'rotate(0deg)',
+                    }}
+                  />
+                  <h4 className="font-mono font-bold text-sm" style={{ color: '#F5F5F5' }}>{proj.name}</h4>
+                </button>
+
+                {/* Accordion body */}
+                {openProjects[i] && (
+                  <div className="px-4 pb-4">
+                    <p className="text-xs leading-relaxed mb-3" style={{ color: '#AB987A' }}>{proj.description}</p>
                     {proj.images && proj.images.length > 0 && (
-                      <div className="grid grid-cols-2 gap-2 mt-3">
+                      <div className="grid grid-cols-2 gap-2 mb-3">
                         {proj.images.map((src, idx) => (
-                          <div key={idx} className="relative w-full overflow-hidden rounded-lg" style={{ aspectRatio: '16/9' }}>
-                            <Image
-                              src={src}
-                              alt={`${proj.name} ${idx + 1}`}
-                              fill
-                              className="object-cover"
-                              sizes="(max-width: 768px) 50vw, 300px"
-                            />
-                          </div>
+                          <Image
+                            key={idx}
+                            src={src}
+                            alt={`${proj.name} ${idx + 1}`}
+                            width={800}
+                            height={500}
+                            className="rounded-lg w-full h-auto"
+                            sizes="(max-width: 768px) 50vw, 400px"
+                          />
                         ))}
                       </div>
                     )}
-                    <div className="flex flex-wrap gap-2 mt-3">
+                    <div className="flex flex-wrap gap-2">
                       {proj.tech.map(t => (
                         <span
                           key={t}
@@ -167,7 +189,7 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
                       ))}
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             ))}
           </div>
