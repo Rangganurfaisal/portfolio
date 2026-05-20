@@ -38,6 +38,7 @@ export default function GameModal({ onClose }: Props) {
   const [name, setName] = useState('')
   const [finalScore, setFinalScore] = useState(0)
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
+  const [gameKey, setGameKey] = useState(0)
 
   useEffect(() => {
     setLeaderboard(getLeaderboard())
@@ -56,6 +57,7 @@ export default function GameModal({ onClose }: Props) {
   }
 
   const handleRestart = () => {
+    setGameKey(k => k + 1)
     setScreen('game')
   }
 
@@ -146,7 +148,7 @@ export default function GameModal({ onClose }: Props) {
 
         {/* Screen: Game */}
         {screen === 'game' && (
-          <Game2048 key={Date.now()} playerName={name} onGameOver={handleGameOver} />
+          <Game2048 key={gameKey} playerName={name} onGameOver={handleGameOver} />
         )}
 
         {/* Screen: Game Over */}

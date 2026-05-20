@@ -43,34 +43,29 @@ function slideRow(row: (number | null)[]): { row: (number | null)[]; score: numb
 }
 
 function move(board: Board, dir: 'left' | 'right' | 'up' | 'down'): { board: Board; score: number; moved: boolean } {
-  let b = board.map(r => [...r])
   let totalScore = 0
+  const transpose = (g: Board): Board => g[0].map((_, c) => g.map(r => r[c]))
 
-  const rotate = (b: Board) => b[0].map((_, c) => b.map(r => r[c]).reverse())
-  const rotateBack = (b: Board) => b[0].map((_, c) => b.map(r => r[c])).map(r => r.reverse())
+  // Normalize so we always slide left
+  let grid = board.map(r => [...r])
+  if (dir === 'right') grid = grid.map(r => [...r].reverse())
+  if (dir === 'up') grid = transpose(grid)
+  if (dir === 'down') { grid = transpose(grid); grid = grid.map(r => [...r].reverse()) }
 
-  if (dir === 'right') b = b.map(r => [...r].reverse()) as Board
-  if (dir === 'up') b = rotate(b)
-  if (dir === 'down') b = rotateBack(b)
-
-  const newBoard: Board = b.map(row => {
-    const { row: slid, score } = slideRow(row)
+  const slid: Board = grid.map(row => {
+    const { row: s, score } = slideRow(row)
     totalScore += score
-    return slid
+    return s
   })
 
-  if (dir === 'right') newBoard.forEach((r, i) => { newBoard[i] = [...r].reverse() })
-  if (dir === 'up') {
-    const tmp = rotate(newBoard)
-    for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) newBoard[r][c] = tmp[r][c]
-  }
-  if (dir === 'down') {
-    const tmp = rotateBack(newBoard)
-    for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) newBoard[r][c] = tmp[r][c]
-  }
+  // Undo normalization
+  let result = slid
+  if (dir === 'right') result = result.map(r => [...r].reverse())
+  if (dir === 'up') result = transpose(result)
+  if (dir === 'down') { result = result.map(r => [...r].reverse()); result = transpose(result) }
 
-  const moved = JSON.stringify(board) !== JSON.stringify(newBoard)
-  return { board: newBoard, score: totalScore, moved }
+  const moved = JSON.stringify(board) !== JSON.stringify(result)
+  return { board: result, score: totalScore, moved }
 }
 
 function isGameOver(board: Board): boolean {
