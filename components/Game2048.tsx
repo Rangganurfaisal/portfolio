@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 
 type Board = (number | null)[][]
 
@@ -101,6 +101,7 @@ export default function Game2048({ playerName, onGameOver }: Props) {
   const [board, setBoard] = useState<Board>(initBoard)
   const [score, setScore] = useState(0)
   const [over, setOver] = useState(false)
+  const boardRef = useRef<HTMLDivElement>(null)
 
   const doMove = useCallback((dir: 'left' | 'right' | 'up' | 'down') => {
     if (over) return
@@ -131,19 +132,26 @@ export default function Game2048({ playerName, onGameOver }: Props) {
     return () => window.removeEventListener('keydown', onKey)
   }, [doMove])
 
-  // touch swipe
+  // touch swipe — attached to board element to prevent page scroll
   useEffect(() => {
+    const el = boardRef.current
+    if (!el) return
     let startX = 0, startY = 0
-    const onStart = (e: TouchEvent) => { startX = e.touches[0].clientX; startY = e.touches[0].clientY }
+    const onStart = (e: TouchEvent) => {
+      e.preventDefault()
+      startX = e.touches[0].clientX
+      startY = e.touches[0].clientY
+    }
     const onEnd = (e: TouchEvent) => {
       const dx = e.changedTouches[0].clientX - startX
       const dy = e.changedTouches[0].clientY - startY
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return
       if (Math.abs(dx) > Math.abs(dy)) doMove(dx > 0 ? 'right' : 'left')
       else doMove(dy > 0 ? 'down' : 'up')
     }
-    window.addEventListener('touchstart', onStart)
-    window.addEventListener('touchend', onEnd)
-    return () => { window.removeEventListener('touchstart', onStart); window.removeEventListener('touchend', onEnd) }
+    el.addEventListener('touchstart', onStart, { passive: false })
+    el.addEventListener('touchend', onEnd)
+    return () => { el.removeEventListener('touchstart', onStart); el.removeEventListener('touchend', onEnd) }
   }, [doMove])
 
   return (
@@ -158,9 +166,11 @@ export default function Game2048({ playerName, onGameOver }: Props) {
       </div>
 
       <div
+        ref={boardRef}
         style={{
           display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
           gap: '8px', background: '#0a0f1a', borderRadius: '8px', padding: '8px',
+          touchAction: 'none',
         }}
       >
         {board.flat().map((val, i) => {
