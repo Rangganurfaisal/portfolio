@@ -30,7 +30,7 @@ function ParticleCanvas() {
     canvas.parentElement?.addEventListener('mousemove', onMouseMove)
     canvas.parentElement?.addEventListener('mouseleave', onMouseLeave)
 
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 75; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
