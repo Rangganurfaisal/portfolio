@@ -69,7 +69,6 @@ export default function GameModal({ onClose }: Props) {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: '16px',
       }}
-      onClick={onClose}
     >
       <div
         onClick={e => e.stopPropagation()}

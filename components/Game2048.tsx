@@ -193,9 +193,19 @@ export default function Game2048({ playerName, onGameOver }: Props) {
         })}
       </div>
 
-      <p className="font-mono text-xs mt-3 text-center" style={{ color: '#AB987A' }}>
-        Arrow keys / swipe to move
-      </p>
+      <div className="flex items-center justify-between mt-3">
+        <p className="font-mono text-xs" style={{ color: '#AB987A' }}>
+          Arrow keys / swipe to move
+        </p>
+        <button
+          onClick={() => { setOver(true); onGameOver(score) }}
+          disabled={over}
+          className="font-mono text-xs px-3 py-1 rounded"
+          style={{ background: 'rgba(255,83,61,0.08)', color: '#FF533D', border: '1px solid rgba(255,83,61,0.2)', cursor: 'pointer' }}
+        >
+          Menyerah
+        </button>
+      </div>
     </div>
   )
 }
