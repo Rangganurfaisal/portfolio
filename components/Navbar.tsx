@@ -1,6 +1,9 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Menu, X } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+const GameModal = dynamic(() => import('./GameModal'), { ssr: false })
 
 const links = ['About', 'Skills', 'Experience', 'Contact']
 
@@ -14,12 +17,35 @@ const scrollTargets: Record<string, string> = {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const [gameOpen, setGameOpen] = useState(false)
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 40)
     window.addEventListener('scroll', fn)
     return () => window.removeEventListener('scroll', fn)
   }, [])
+
+  // Desktop: press G to open game
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'g' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const tag = (e.target as HTMLElement).tagName
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return
+        setGameOpen(true)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  // Mobile: long press logo
+  const handleLogoPointerDown = () => {
+    longPressTimer.current = setTimeout(() => setGameOpen(true), 1000)
+  }
+  const handleLogoPointerUp = () => {
+    if (longPressTimer.current) clearTimeout(longPressTimer.current)
+  }
 
   const scrollTo = (label: string) => {
     setOpen(false)
@@ -28,6 +54,7 @@ export default function Navbar() {
   }
 
   return (
+    <>
     <nav
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={{
@@ -37,7 +64,15 @@ export default function Navbar() {
       }}
     >
       <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
-        <span className="font-mono font-bold text-lg" style={{ color: '#FF533D' }}>rnf.dev</span>
+        <span
+          className="font-mono font-bold text-lg"
+          style={{ color: '#FF533D', cursor: 'default', WebkitUserSelect: 'none' }}
+          onPointerDown={handleLogoPointerDown}
+          onPointerUp={handleLogoPointerUp}
+          onPointerLeave={handleLogoPointerUp}
+        >
+          rnf.dev
+        </span>
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
@@ -84,5 +119,8 @@ export default function Navbar() {
         </div>
       )}
     </nav>
+
+    {gameOpen && <GameModal onClose={() => setGameOpen(false)} />}
+    </>
   )
 }
