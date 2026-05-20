@@ -133,15 +133,13 @@ export default function GameModal({ onClose }: Props) {
             >
               <Play size={15} /> Start Game
             </button>
-            {leaderboard.length > 0 && (
-              <button
-                onClick={() => setScreen('leaderboard')}
-                className="w-full mt-2 font-mono text-xs"
-                style={{ background: 'none', border: 'none', color: '#AB987A', cursor: 'pointer', padding: '8px' }}
-              >
-                View Leaderboard →
-              </button>
-            )}
+            <button
+              onClick={() => setScreen('leaderboard')}
+              className="w-full mt-2 font-mono text-xs"
+              style={{ background: 'none', border: 'none', color: '#AB987A', cursor: 'pointer', padding: '8px' }}
+            >
+              View Leaderboard →
+            </button>
           </div>
         )}
 
