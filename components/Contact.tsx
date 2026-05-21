@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Mail, Phone, Linkedin, Send } from 'lucide-react'
+import ScrollReveal from './ScrollReveal'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', subject: '', message: '' })
@@ -29,17 +30,20 @@ export default function Contact() {
 
   return (
     <section id="contact" className="max-w-4xl mx-auto px-6 py-24">
-      <div className="mb-12 text-center">
-        <span className="label">04 / Contact</span>
-        <div className="section-divider" style={{ margin: '12px auto 28px' }} />
-        <h2 className="font-mono font-bold text-2xl" style={{ color: '#F5F5F5' }}>Get In Touch</h2>
-        <p className="text-sm mt-2" style={{ color: '#AB987A' }}>
-          Open to new opportunities, collaborations, or just a conversation.
-        </p>
-      </div>
+      <ScrollReveal>
+        <div className="mb-12 text-center">
+          <span className="label">04 / Contact</span>
+          <div className="section-divider" style={{ margin: '12px auto 28px' }} />
+          <h2 className="font-mono font-bold text-2xl" style={{ color: '#F5F5F5' }}>Get In Touch</h2>
+          <p className="text-sm mt-2" style={{ color: '#AB987A' }}>
+            Open to new opportunities, collaborations, or just a conversation.
+          </p>
+        </div>
+      </ScrollReveal>
 
       <div className="grid md:grid-cols-2 gap-10">
         {/* Contact info */}
+        <ScrollReveal delay={100}>
         <div className="space-y-4">
           {[
             { icon: Mail, label: 'Email', value: 'rangganurfaisal07@gmail.com', href: 'mailto:rangganurfaisal07@gmail.com' },
@@ -67,8 +71,10 @@ export default function Contact() {
             </a>
           ))}
         </div>
+        </ScrollReveal>
 
         {/* Form */}
+        <ScrollReveal delay={200}>
         <div className="card p-6 space-y-4">
           {[
             { name: 'name', label: 'Your Name', placeholder: 'John Doe' },
@@ -113,6 +119,7 @@ export default function Contact() {
             Opens your email app with the message pre-filled
           </p>
         </div>
+        </ScrollReveal>
       </div>
     </section>
   )

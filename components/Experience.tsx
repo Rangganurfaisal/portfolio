@@ -209,21 +209,26 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
   )
 }
 
+import ScrollReveal from './ScrollReveal'
+
 export default function Experience() {
   const [selected, setSelected] = useState<Experience | null>(null)
 
   return (
     <section id="experience" className="max-w-4xl mx-auto px-6 py-24">
-      <div className="mb-12 text-center">
-        <span className="label">03 / Experience</span>
-        <div className="section-divider" style={{ margin: '12px auto 28px' }} />
-        <h2 className="font-mono font-bold text-2xl" style={{ color: '#F5F5F5' }}>Work History</h2>
-        <p className="text-sm mt-2" style={{ color: '#AB987A' }}>Click a card to see project details</p>
-      </div>
+      <ScrollReveal>
+        <div className="mb-12 text-center">
+          <span className="label">03 / Experience</span>
+          <div className="section-divider" style={{ margin: '12px auto 28px' }} />
+          <h2 className="font-mono font-bold text-2xl" style={{ color: '#F5F5F5' }}>Work History</h2>
+          <p className="text-sm mt-2" style={{ color: '#AB987A' }}>Click a card to see project details</p>
+        </div>
+      </ScrollReveal>
 
       <div className="space-y-4">
         {experiences.map((exp, i) => (
-          <div key={i} className="card cursor-pointer p-6" onClick={() => setSelected(exp)}>
+          <ScrollReveal key={i} delay={i * 100}>
+          <div className="card cursor-pointer p-6" onClick={() => setSelected(exp)}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 mb-1">
@@ -254,6 +259,7 @@ export default function Experience() {
               {exp.summary.slice(0, 120)}...
             </p>
           </div>
+          </ScrollReveal>
         ))}
       </div>
 

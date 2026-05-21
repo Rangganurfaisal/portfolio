@@ -66,34 +66,40 @@ function SkillIcon({ icon }: { icon: SkillIcon }) {
   return <div style={base}><Icon size={22} style={{ color: icon.color }} /></div>
 }
 
+import ScrollReveal from './ScrollReveal'
+
 export default function Skills() {
   return (
     <section id="skills" className="max-w-4xl mx-auto px-6 py-24">
-      <div className="mb-12 text-center">
-        <span className="label">02 / Skills</span>
-        <div className="section-divider" style={{ margin: '12px auto 28px' }} />
-        <h2 className="font-mono font-bold" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', color: '#F5F5F5' }}>
-          Technical Expertise
-        </h2>
-      </div>
+      <ScrollReveal>
+        <div className="mb-12 text-center">
+          <span className="label">02 / Skills</span>
+          <div className="section-divider" style={{ margin: '12px auto 28px' }} />
+          <h2 className="font-mono font-bold" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', color: '#F5F5F5' }}>
+            Technical Expertise
+          </h2>
+        </div>
+      </ScrollReveal>
 
       <div className="space-y-10">
-        {skillGroups.map(group => (
-          <div key={group.category}>
-            <p className="font-mono text-xs mb-5 tracking-widest uppercase text-center" style={{ color: '#AB987A' }}>
-              {group.category}
-            </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              {group.skills.map(skill => (
-                <div key={skill.name} className="skill-pill" style={{ width: '110px', flexShrink: 0 }}>
-                  <SkillIcon icon={skill.icon} />
-                  <span className="font-mono text-xs text-center leading-tight" style={{ color: '#F5F5F5' }}>
-                    {skill.name}
-                  </span>
-                </div>
-              ))}
+        {skillGroups.map((group, gi) => (
+          <ScrollReveal key={group.category} delay={gi * 100}>
+            <div>
+              <p className="font-mono text-xs mb-5 tracking-widest uppercase text-center" style={{ color: '#AB987A' }}>
+                {group.category}
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                {group.skills.map(skill => (
+                  <div key={skill.name} className="skill-pill" style={{ width: '110px', flexShrink: 0 }}>
+                    <SkillIcon icon={skill.icon} />
+                    <span className="font-mono text-xs text-center leading-tight" style={{ color: '#F5F5F5' }}>
+                      {skill.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         ))}
       </div>
     </section>
