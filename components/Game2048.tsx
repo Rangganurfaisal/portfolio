@@ -97,29 +97,53 @@ interface Props {
   onGameOver: (score: number) => void
 }
 
+const MAX_UNDOS = 3
+
+function hasWonTile(board: Board) {
+  return board.some(row => row.some(v => v === 2048))
+}
+
 export default function Game2048({ playerName, onGameOver }: Props) {
   const [board, setBoard] = useState<Board>(initBoard)
   const [score, setScore] = useState(0)
   const [over, setOver] = useState(false)
+  const [history, setHistory] = useState<{ board: Board; score: number }[]>([])
+  const [undosLeft, setUndosLeft] = useState(MAX_UNDOS)
+  const [showWin, setShowWin] = useState(false)
+  const [continued, setContinued] = useState(false)
   const boardRef = useRef<HTMLDivElement>(null)
+  const scoreRef = useRef(0)
 
   const doMove = useCallback((dir: 'left' | 'right' | 'up' | 'down') => {
-    if (over) return
+    if (over || showWin) return
     setBoard(prev => {
+      const prevScore = scoreRef.current
       const { board: next, score: gained, moved } = move(prev, dir)
       if (!moved) return prev
       const withNew = addRandom(next)
-      setScore(s => {
-        const total = s + gained
-        if (isGameOver(withNew)) {
-          setOver(true)
-          onGameOver(total)
-        }
-        return total
-      })
+      const newScore = prevScore + gained
+      scoreRef.current = newScore
+      setScore(newScore)
+      setHistory(h => [...h, { board: prev, score: prevScore }].slice(-MAX_UNDOS))
+      if (isGameOver(withNew)) {
+        setOver(true)
+        onGameOver(newScore)
+      } else if (!continued && hasWonTile(withNew)) {
+        setShowWin(true)
+      }
       return withNew
     })
-  }, [over, onGameOver])
+  }, [over, showWin, continued, onGameOver])
+
+  const doUndo = useCallback(() => {
+    if (undosLeft <= 0 || history.length === 0) return
+    const last = history[history.length - 1]
+    setBoard(last.board)
+    setScore(last.score)
+    scoreRef.current = last.score
+    setHistory(h => h.slice(0, -1))
+    setUndosLeft(u => u - 1)
+  }, [undosLeft, history])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -155,7 +179,39 @@ export default function Game2048({ playerName, onGameOver }: Props) {
   }, [doMove])
 
   return (
-    <div style={{ userSelect: 'none' }}>
+    <div style={{ userSelect: 'none', position: 'relative' }}>
+
+      {/* Win overlay */}
+      {showWin && (
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 10, borderRadius: '8px',
+          background: 'rgba(10,15,26,0.88)', backdropFilter: 'blur(4px)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px',
+        }}>
+          <p className="font-mono font-bold text-xl" style={{ color: '#f1c40f' }}>🎉 Game Completed!</p>
+          <p className="font-mono text-sm" style={{ color: '#AB987A' }}>
+            Score: <span style={{ color: '#F5F5F5', fontWeight: 'bold' }}>{score}</span>
+          </p>
+          <div className="flex gap-3 mt-2">
+            <button
+              onClick={() => { setOver(true); onGameOver(score) }}
+              className="btn-primary"
+              style={{ fontSize: '0.75rem', padding: '8px 16px' }}
+            >
+              Finish
+            </button>
+            <button
+              onClick={() => { setContinued(true); setShowWin(false) }}
+              className="btn-outline"
+              style={{ fontSize: '0.75rem', padding: '8px 16px' }}
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Header row */}
       <div className="flex items-center justify-between mb-3">
         <span className="font-mono text-sm" style={{ color: '#AB987A' }}>
           Player: <span style={{ color: '#FF533D' }}>{playerName}</span>
@@ -165,6 +221,7 @@ export default function Game2048({ playerName, onGameOver }: Props) {
         </span>
       </div>
 
+      {/* Board */}
       <div
         ref={boardRef}
         style={{
@@ -193,10 +250,22 @@ export default function Game2048({ playerName, onGameOver }: Props) {
         })}
       </div>
 
+      {/* Footer row */}
       <div className="flex items-center justify-between mt-3">
-        <p className="font-mono text-xs" style={{ color: '#AB987A' }}>
-          Arrow keys / swipe to move
-        </p>
+        {/* Undo stars */}
+        <button
+          onClick={doUndo}
+          disabled={undosLeft === 0 || history.length === 0 || over}
+          title={`Undo (${undosLeft} left)`}
+          style={{ background: 'none', border: 'none', cursor: undosLeft > 0 && history.length > 0 ? 'pointer' : 'default', padding: 0 }}
+        >
+          <span className="font-mono text-sm" style={{ letterSpacing: '2px' }}>
+            {Array.from({ length: MAX_UNDOS }).map((_, i) => (
+              <span key={i} style={{ color: i < undosLeft ? '#f1c40f' : '#243048' }}>★</span>
+            ))}
+          </span>
+        </button>
+
         <button
           onClick={() => { setOver(true); onGameOver(score) }}
           disabled={over}
