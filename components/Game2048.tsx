@@ -252,19 +252,27 @@ export default function Game2048({ playerName, onGameOver }: Props) {
 
       {/* Footer row */}
       <div className="flex items-center justify-between mt-3">
-        {/* Undo stars */}
-        <button
-          onClick={doUndo}
-          disabled={undosLeft === 0 || history.length === 0 || over}
-          title={`Undo (${undosLeft} left)`}
-          style={{ background: 'none', border: 'none', cursor: undosLeft > 0 && history.length > 0 ? 'pointer' : 'default', padding: 0 }}
-        >
+        {/* Undo button + stars */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={doUndo}
+            disabled={undosLeft === 0 || history.length === 0 || over}
+            className="font-mono text-xs px-3 py-1 rounded"
+            style={{
+              background: 'rgba(241,196,15,0.08)',
+              color: undosLeft > 0 && history.length > 0 ? '#f1c40f' : '#3a3a2a',
+              border: '1px solid rgba(241,196,15,0.2)',
+              cursor: undosLeft > 0 && history.length > 0 ? 'pointer' : 'not-allowed',
+            }}
+          >
+            Undo
+          </button>
           <span className="font-mono text-sm" style={{ letterSpacing: '2px' }}>
             {Array.from({ length: MAX_UNDOS }).map((_, i) => (
               <span key={i} style={{ color: i < undosLeft ? '#f1c40f' : '#243048' }}>★</span>
             ))}
           </span>
-        </button>
+        </div>
 
         <button
           onClick={() => { setOver(true); onGameOver(score) }}
