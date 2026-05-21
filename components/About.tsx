@@ -1,24 +1,71 @@
+'use client'
+import { useState } from 'react'
+import Image from 'next/image'
+import { X } from 'lucide-react'
+import ScrollReveal from './ScrollReveal'
+
 const certs = [
   {
     name: 'Oracle Cloud Infrastructure 2025 Certified AI Foundations Associate',
     issuer: 'Oracle University',
     year: '2025',
+    image: '/cert-oracle.jpg',
   },
   {
     name: 'ML Practitioner Certificate',
     issuer: 'Dataiku',
     year: '2026',
+    image: '/cert-dataiku.jpg',
   },
   {
     name: 'Data Science & AI',
     issuer: 'Startup Campus x Kampus Merdeka, MSIB Batch 6',
     year: '2024',
+    image: '/cert-startupcampus.jpg',
   },
 ]
 
-import ScrollReveal from './ScrollReveal'
+function CertModal({ cert, onClose }: { cert: typeof certs[0]; onClose: () => void }) {
+  return (
+    <div
+      className="modal-overlay"
+      onClick={onClose}
+      style={{ zIndex: 200 }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: '#162030', border: '1px solid #243048', borderRadius: '16px',
+          padding: '20px', width: '100%', maxWidth: '680px', position: 'relative',
+        }}
+      >
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <p className="font-mono font-bold text-sm" style={{ color: '#F5F5F5' }}>{cert.name}</p>
+            <p className="font-mono text-xs mt-1" style={{ color: '#AB987A' }}>{cert.issuer} · {cert.year}</p>
+          </div>
+          <button
+            onClick={onClose}
+            style={{ background: '#243048', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer', color: '#F5F5F5', flexShrink: 0, marginLeft: '12px' }}
+          >
+            <X size={16} />
+          </button>
+        </div>
+        <Image
+          src={cert.image}
+          alt={cert.name}
+          width={1200}
+          height={850}
+          className="rounded-lg w-full h-auto"
+          style={{ border: '1px solid #243048' }}
+        />
+      </div>
+    </div>
+  )
+}
 
 export default function About() {
+  const [selectedCert, setSelectedCert] = useState<typeof certs[0] | null>(null)
   return (
     <section id="about-me" className="max-w-4xl mx-auto px-6 py-24">
 
@@ -66,9 +113,14 @@ export default function About() {
             </div>
             <div>
               {certs.map((cert, i) => (
-                <div key={i}>
+                <div
+                  key={i}
+                  onClick={() => setSelectedCert(cert)}
+                  style={{ cursor: 'pointer' }}
+                  className="group"
+                >
                   {i > 0 && <div style={{ height: '1px', background: '#243048', margin: '10px 0' }} />}
-                  <p className="text-sm font-medium leading-snug" style={{ color: '#F5F5F5' }}>{cert.name}</p>
+                  <p className="text-sm font-medium leading-snug group-hover:text-[#FF533D] transition-colors" style={{ color: '#F5F5F5' }}>{cert.name}</p>
                   <p className="font-mono text-xs mt-1" style={{ color: '#AB987A' }}>{cert.issuer} · {cert.year}</p>
                 </div>
               ))}
@@ -76,6 +128,8 @@ export default function About() {
           </div>
         </ScrollReveal>
       </div>
+
+      {selectedCert && <CertModal cert={selectedCert} onClose={() => setSelectedCert(null)} />}
     </section>
   )
 }
