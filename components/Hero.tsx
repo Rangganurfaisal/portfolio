@@ -177,7 +177,7 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <div className="fade-up fade-up-4 flex flex-wrap justify-center gap-4">
-          <a href="/cv-rangga.pdf" download className="btn-primary">
+          <a href="/CV.pdf" download className="btn-primary">
             <Download size={15} /> Download CV
           </a>
           <button onClick={() => scrollTo('contact')} className="btn-outline">
