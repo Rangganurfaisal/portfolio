@@ -168,7 +168,7 @@ export default function Hero() {
           <div className="section-divider" style={{ margin: '0 auto 24px' }} />
           <p
             className="text-sm leading-relaxed mx-auto"
-            style={{ color: '#AB987A', maxWidth: '520px', fontSize: '0.95rem' }}
+            style={{ color: '#AB987A', maxWidth: '535px', fontSize: '0.95rem' }}
           >
             Transforming complex data into intelligent solutions — from end-to-end ML
             development to AI-powered automation that delivers tangible business impact.
