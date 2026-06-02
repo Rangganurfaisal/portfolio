@@ -1,7 +1,56 @@
 'use client'
 import { useState } from 'react'
 import Image from 'next/image'
-import { X, ExternalLink, Calendar, MapPin, ChevronRight } from 'lucide-react'
+import { X, ExternalLink, Calendar, MapPin, ChevronRight, ChevronLeft } from 'lucide-react'
+
+function Lightbox({ images, index, onClose }: { images: string[]; index: number; onClose: () => void }) {
+  const [current, setCurrent] = useState(index)
+  const prev = () => setCurrent(i => (i - 1 + images.length) % images.length)
+  const next = () => setCurrent(i => (i + 1) % images.length)
+
+  return (
+    <div
+      style={{
+        position: 'fixed', inset: 0, zIndex: 300,
+        background: 'rgba(0,0,0,0.92)', backdropFilter: 'blur(8px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}
+      onClick={onClose}
+    >
+      <button onClick={onClose} style={{ position: 'absolute', top: 16, right: 16, background: '#243048', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer', color: '#F5F5F5', zIndex: 1 }}>
+        <X size={20} />
+      </button>
+
+      {images.length > 1 && (
+        <>
+          <button onClick={e => { e.stopPropagation(); prev() }} style={{ position: 'absolute', left: 16, background: '#243048', border: 'none', borderRadius: '8px', padding: '10px', cursor: 'pointer', color: '#F5F5F5', zIndex: 1 }}>
+            <ChevronLeft size={20} />
+          </button>
+          <button onClick={e => { e.stopPropagation(); next() }} style={{ position: 'absolute', right: 16, background: '#243048', border: 'none', borderRadius: '8px', padding: '10px', cursor: 'pointer', color: '#F5F5F5', zIndex: 1 }}>
+            <ChevronRight size={20} />
+          </button>
+        </>
+      )}
+
+      <div onClick={e => e.stopPropagation()} style={{ maxWidth: '90vw', maxHeight: '90vh', position: 'relative' }}>
+        <Image
+          src={images[current]}
+          alt={`preview ${current + 1}`}
+          width={1200}
+          height={800}
+          style={{ maxWidth: '90vw', maxHeight: '85vh', width: 'auto', height: 'auto', borderRadius: '8px', objectFit: 'contain' }}
+          onContextMenu={e => e.preventDefault()}
+          draggable={false}
+        />
+        {images.length > 1 && (
+          <p className="font-mono text-xs text-center mt-2" style={{ color: '#AB987A' }}>
+            {current + 1} / {images.length}
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
 
 interface Project {
   name: string
@@ -85,6 +134,7 @@ const experiences: Experience[] = [
 
 function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
   const [openProjects, setOpenProjects] = useState<Record<number, boolean>>({})
+  const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null)
 
   const toggleProject = (i: number) =>
     setOpenProjects(prev => ({ ...prev, [i]: !prev[i] }))
@@ -181,8 +231,11 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
                           alt={`${proj.name} ${idx + 1}`}
                           width={800}
                           height={500}
-                          className="rounded-lg w-full h-auto"
+                          className="rounded-lg w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                           sizes="(max-width: 768px) 50vw, 400px"
+                          onClick={() => setLightbox({ images: proj.images!, index: idx })}
+                          onContextMenu={e => e.preventDefault()}
+                          draggable={false}
                         />
                       ))}
                     </div>
@@ -205,6 +258,7 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
           </div>
         </div>
       </div>
+      {lightbox && <Lightbox images={lightbox.images} index={lightbox.index} onClose={() => setLightbox(null)} />}
     </div>
   )
 }
