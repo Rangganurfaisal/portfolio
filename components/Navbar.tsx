@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { Menu, X } from 'lucide-react'
+import Link from 'next/link'
 import dynamic from 'next/dynamic'
 
 const GameModal = dynamic(() => import('./GameModal'), { ssr: false })
@@ -98,6 +99,15 @@ export default function Navbar() {
               {l}
             </button>
           ))}
+          <Link
+            href="/archive"
+            className="font-mono text-sm tracking-widest uppercase transition-colors"
+            style={{ color: '#F5F5F5', textDecoration: 'none' }}
+            onMouseEnter={e => (e.currentTarget.style.color = '#FF533D')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#F5F5F5')}
+          >
+            Archive
+          </Link>
         </div>
 
         {/* Mobile toggle */}
@@ -126,6 +136,14 @@ export default function Navbar() {
               {l}
             </button>
           ))}
+          <Link
+            href="/archive"
+            onClick={() => setOpen(false)}
+            className="font-mono text-xs tracking-widest uppercase text-left py-2"
+            style={{ color: '#F5F5F5', textDecoration: 'none' }}
+          >
+            Archive
+          </Link>
         </div>
       )}
     </nav>
