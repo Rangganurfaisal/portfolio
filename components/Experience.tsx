@@ -127,6 +127,7 @@ const experiences: Experience[] = [
         name: 'Gas Pipeline Pressure Prediction',
         description: 'Deep Learning model predicting gas pipeline pressure anomalies using temperature, energy rate, and gas component variables. Designed integration into the Integrated Monitoring System (IMS) in collaboration with the operational team.',
         tech: ['Python', 'TensorFlow', 'Deep Learning', 'EDA', 'Pandas'],
+        images: ['/ict%20intern/1.png', '/ict%20intern/2.png', '/ict%20intern/3.png'],
       },
     ],
   },
@@ -222,24 +223,44 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
                   <p className="text-xs leading-relaxed mb-3" style={{ color: '#AB987A' }}>{proj.description}</p>
 
                   {/* Images — only shown when clicked */}
-                  {proj.images && proj.images.length > 0 && openProjects[i] && (
-                    <div className="grid grid-cols-2 gap-2 mb-3">
-                      {proj.images.map((src, idx) => (
-                        <Image
-                          key={idx}
-                          src={src}
-                          alt={`${proj.name} ${idx + 1}`}
-                          width={800}
-                          height={500}
+                  {proj.images && proj.images.length > 0 && openProjects[i] && (() => {
+                    const imgs = proj.images!
+                    // 4 images → 2x2 grid; otherwise → first full width + rest in 2-col grid
+                    if (imgs.length === 4) return (
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        {imgs.map((src, idx) => (
+                          <Image key={idx} src={src} alt={`${proj.name} ${idx + 1}`}
+                            width={800} height={500}
+                            className="rounded-lg w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                            onClick={() => setLightbox({ images: imgs, index: idx })}
+                            onContextMenu={e => e.preventDefault()} draggable={false}
+                          />
+                        ))}
+                      </div>
+                    )
+                    return (
+                      <div className="mb-3 space-y-2">
+                        <Image src={imgs[0]} alt={`${proj.name} 1`}
+                          width={1200} height={800}
                           className="rounded-lg w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                          sizes="(max-width: 768px) 50vw, 400px"
-                          onClick={() => setLightbox({ images: proj.images!, index: idx })}
-                          onContextMenu={e => e.preventDefault()}
-                          draggable={false}
+                          onClick={() => setLightbox({ images: imgs, index: 0 })}
+                          onContextMenu={e => e.preventDefault()} draggable={false}
                         />
-                      ))}
-                    </div>
-                  )}
+                        {imgs.length > 1 && (
+                          <div className="grid grid-cols-2 gap-2">
+                            {imgs.slice(1).map((src, idx) => (
+                              <Image key={idx + 1} src={src} alt={`${proj.name} ${idx + 2}`}
+                                width={800} height={500}
+                                className="rounded-lg w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                                onClick={() => setLightbox({ images: imgs, index: idx + 1 })}
+                                onContextMenu={e => e.preventDefault()} draggable={false}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })()}
 
                   <div className="flex flex-wrap gap-2">
                     {proj.tech.map(t => (
