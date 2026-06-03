@@ -240,24 +240,14 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
                     )
                     return (
                       <div className="mb-3 space-y-2">
-                        <Image src={imgs[0]} alt={`${proj.name} 1`}
-                          width={1200} height={800}
-                          className="rounded-lg w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setLightbox({ images: imgs, index: 0 })}
-                          onContextMenu={e => e.preventDefault()} draggable={false}
-                        />
-                        {imgs.length > 1 && (
-                          <div className="grid grid-cols-2 gap-2">
-                            {imgs.slice(1).map((src, idx) => (
-                              <Image key={idx + 1} src={src} alt={`${proj.name} ${idx + 2}`}
-                                width={800} height={500}
-                                className="rounded-lg w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                                onClick={() => setLightbox({ images: imgs, index: idx + 1 })}
-                                onContextMenu={e => e.preventDefault()} draggable={false}
-                              />
-                            ))}
-                          </div>
-                        )}
+                        {imgs.map((src, idx) => (
+                          <Image key={idx} src={src} alt={`${proj.name} ${idx + 1}`}
+                            width={1200} height={800}
+                            className="rounded-lg w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                            onClick={() => setLightbox({ images: imgs, index: idx })}
+                            onContextMenu={e => e.preventDefault()} draggable={false}
+                          />
+                        ))}
                       </div>
                     )
                   })()}
