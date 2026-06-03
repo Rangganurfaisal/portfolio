@@ -229,7 +229,7 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
                     if (imgs.length === 4) return (
                       <div className="grid grid-cols-2 gap-2 mb-3">
                         {imgs.map((src, idx) => (
-                          <div key={idx} className="relative overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ height: '140px' }} onClick={() => setLightbox({ images: imgs, index: idx })}>
+                          <div key={idx} className="relative overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ height: '170px' }} onClick={() => setLightbox({ images: imgs, index: idx })}>
                             <Image src={src} alt={`${proj.name} ${idx + 1}`}
                               fill style={{ objectFit: 'cover' }}
                               sizes="(max-width: 768px) 50vw, 300px"
@@ -242,7 +242,7 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
                     return (
                       <div className="grid grid-cols-2 gap-2 mb-3">
                         {imgs.map((src, idx) => (
-                          <div key={idx} className="relative overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ height: '140px' }} onClick={() => setLightbox({ images: imgs, index: idx })}>
+                          <div key={idx} className="relative overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ height: '170px' }} onClick={() => setLightbox({ images: imgs, index: idx })}>
                             <Image src={src} alt={`${proj.name} ${idx + 1}`}
                               fill style={{ objectFit: 'cover' }}
                               sizes="(max-width: 768px) 50vw, 300px"
