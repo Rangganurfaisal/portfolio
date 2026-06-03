@@ -239,10 +239,10 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
                       </div>
                     )
                     return (
-                      <div className="mb-3 space-y-2">
+                      <div className="grid grid-cols-2 gap-2 mb-3">
                         {imgs.map((src, idx) => (
                           <Image key={idx} src={src} alt={`${proj.name} ${idx + 1}`}
-                            width={1200} height={800}
+                            width={800} height={500}
                             className="rounded-lg w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                             onClick={() => setLightbox({ images: imgs, index: idx })}
                             onContextMenu={e => e.preventDefault()} draggable={false}
