@@ -19,6 +19,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [gameOpen, setGameOpen] = useState(false)
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const longPressTriggered = useRef(false)
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 40)
@@ -41,10 +42,18 @@ export default function Navbar() {
 
   // Mobile: long press logo
   const handleLogoPointerDown = () => {
-    longPressTimer.current = setTimeout(() => setGameOpen(true), 1000)
+    longPressTriggered.current = false
+    longPressTimer.current = setTimeout(() => {
+      longPressTriggered.current = true
+      setGameOpen(true)
+    }, 1000)
   }
   const handleLogoPointerUp = () => {
     if (longPressTimer.current) clearTimeout(longPressTimer.current)
+  }
+  const handleLogoClick = () => {
+    if (longPressTriggered.current) return
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const scrollTo = (label: string) => {
@@ -66,10 +75,11 @@ export default function Navbar() {
       <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
         <span
           className="font-mono font-bold text-lg"
-          style={{ color: '#FF533D', cursor: 'default', WebkitUserSelect: 'none' }}
+          style={{ color: '#FF533D', cursor: 'pointer', WebkitUserSelect: 'none' }}
           onPointerDown={handleLogoPointerDown}
           onPointerUp={handleLogoPointerUp}
           onPointerLeave={handleLogoPointerUp}
+          onClick={handleLogoClick}
         >
           rnf.dev
         </span>
