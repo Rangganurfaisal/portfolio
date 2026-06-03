@@ -38,6 +38,7 @@ function Lightbox({ images, index, onClose }: { images: string[]; index: number;
           alt={`preview ${current + 1}`}
           width={1200}
           height={800}
+          unoptimized
           style={{ maxWidth: '90vw', maxHeight: '85vh', width: 'auto', height: 'auto', borderRadius: '8px', objectFit: 'contain' }}
           onContextMenu={e => e.preventDefault()}
           draggable={false}
@@ -110,7 +111,7 @@ const experiences: Experience[] = [
         name: 'APD Safety Compliance Detection (YOLO)',
         description: 'Real-time object detection system deployed on operational CCTV to automatically monitor PPE (hard hat, vest, gloves) compliance. Dataset of ~5,170 annotated images, achieving mAP@50 >85%. Managed full ML lifecycle from data collection to hyperparameter tuning.',
         tech: ['YOLOv8', 'Python', 'OpenCV', 'Custom Dataset', 'Roboflow'],
-        images: ['/apd-1.jpg', '/apd-2.jpg', '/apd-3.jpg', '/apd-4.jpg'],
+        images: ['/api/img/im001', '/api/img/im002', '/api/img/im003', '/api/img/im004'],
       },
     ],
   },
@@ -127,7 +128,7 @@ const experiences: Experience[] = [
         name: 'Gas Pipeline Pressure Prediction',
         description: 'Deep Learning model predicting gas pipeline pressure anomalies using temperature, energy rate, and gas component variables. Designed integration into the Integrated Monitoring System (IMS) in collaboration with the operational team.',
         tech: ['Python', 'TensorFlow', 'Deep Learning', 'EDA', 'Pandas'],
-        images: ['/ict%20intern/1.png', '/ict%20intern/2.png', '/ict%20intern/3.png'],
+        images: ['/api/img/im005', '/api/img/im006', '/api/img/im007'],
       },
     ],
   },
@@ -231,7 +232,7 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
                         {imgs.map((src, idx) => (
                           <div key={idx} className="relative overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ height: '170px' }} onClick={() => setLightbox({ images: imgs, index: idx })}>
                             <Image src={src} alt={`${proj.name} ${idx + 1}`}
-                              fill style={{ objectFit: 'cover' }}
+                              fill unoptimized style={{ objectFit: 'cover' }}
                               sizes="(max-width: 768px) 50vw, 300px"
                               onContextMenu={e => e.preventDefault()} draggable={false}
                             />
@@ -244,7 +245,7 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
                         {imgs.map((src, idx) => (
                           <div key={idx} className="relative overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ height: '170px' }} onClick={() => setLightbox({ images: imgs, index: idx })}>
                             <Image src={src} alt={`${proj.name} ${idx + 1}`}
-                              fill style={{ objectFit: 'cover' }}
+                              fill unoptimized style={{ objectFit: 'cover' }}
                               sizes="(max-width: 768px) 50vw, 300px"
                               onContextMenu={e => e.preventDefault()} draggable={false}
                             />
