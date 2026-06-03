@@ -229,24 +229,26 @@ function Modal({ exp, onClose }: { exp: Experience; onClose: () => void }) {
                     if (imgs.length === 4) return (
                       <div className="grid grid-cols-2 gap-2 mb-3">
                         {imgs.map((src, idx) => (
-                          <Image key={idx} src={src} alt={`${proj.name} ${idx + 1}`}
-                            width={800} height={500}
-                            className="rounded-lg w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                            onClick={() => setLightbox({ images: imgs, index: idx })}
-                            onContextMenu={e => e.preventDefault()} draggable={false}
-                          />
+                          <div key={idx} className="relative overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ height: '140px' }} onClick={() => setLightbox({ images: imgs, index: idx })}>
+                            <Image src={src} alt={`${proj.name} ${idx + 1}`}
+                              fill style={{ objectFit: 'cover' }}
+                              sizes="(max-width: 768px) 50vw, 300px"
+                              onContextMenu={e => e.preventDefault()} draggable={false}
+                            />
+                          </div>
                         ))}
                       </div>
                     )
                     return (
                       <div className="grid grid-cols-2 gap-2 mb-3">
                         {imgs.map((src, idx) => (
-                          <Image key={idx} src={src} alt={`${proj.name} ${idx + 1}`}
-                            width={800} height={500}
-                            className="rounded-lg w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                            onClick={() => setLightbox({ images: imgs, index: idx })}
-                            onContextMenu={e => e.preventDefault()} draggable={false}
-                          />
+                          <div key={idx} className="relative overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ height: '140px' }} onClick={() => setLightbox({ images: imgs, index: idx })}>
+                            <Image src={src} alt={`${proj.name} ${idx + 1}`}
+                              fill style={{ objectFit: 'cover' }}
+                              sizes="(max-width: 768px) 50vw, 300px"
+                              onContextMenu={e => e.preventDefault()} draggable={false}
+                            />
+                          </div>
                         ))}
                       </div>
                     )
